@@ -366,3 +366,26 @@ button { cursor: pointer; font-family: inherit; }
   .controls   { flex-wrap: wrap; justify-content: center; }
   .controls-left, .controls-right { gap: 8px; }
 }
+
+.topbar-right { margin-left: auto; }
+
+.btn-copy-sm {
+  background: transparent;
+  border: 1px solid var(--border);
+  color: var(--text);
+  border-radius: 6px;
+  padding: 6px 14px;
+  font-size: 12px;
+  font-family: var(--font-mono);
+  letter-spacing: 0.04em;
+  opacity: 0.7;
+  transition: opacity 0.2s;
+}
+.btn-copy-sm:hover { opacity: 1; }
+
+.hint {
+  font-size: 11px;
+  opacity: 0.35;
+  letter-spacing: 0.04em;
+  font-style: italic;
+}
