@@ -15,13 +15,16 @@ export default function App() {
   const mediaRecorder  = useRef(null);
   const recordedChunks = useRef([]);
   const timerRef       = useRef(null);
+  const fileInputRef   = useRef(null);
 
-  const [phase,     setPhase]     = useState('lobby');
-  const [theme,     setTheme]     = useState(THEMES[0]);
-  const [recording, setRecording] = useState(false);
-  const [recTime,   setRecTime]   = useState(0);
-  const [copied,    setCopied]    = useState(false);
-  const [error,     setError]     = useState(null);
+  const [phase,      setPhase]      = useState('lobby');
+  const [theme,      setTheme]      = useState(THEMES[0]);
+  const [recording,  setRecording]  = useState(false);
+  const [recTime,    setRecTime]    = useState(0);
+  const [copied,     setCopied]     = useState(false);
+  const [error,      setError]      = useState(null);
+  const [bgImage,    setBgImage]    = useState(null);
+  const [bgOpacity,  setBgOpacity]  = useState(0.85);
 
   useEffect(() => {
     const r = document.documentElement.style;
@@ -29,6 +32,19 @@ export default function App() {
     r.setProperty('--accent', theme.accent);
     r.setProperty('--text',   theme.text);
   }, [theme]);
+
+  const handleBgUpload = (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = (ev) => setBgImage(ev.target.result);
+    reader.readAsDataURL(file);
+  };
+
+  const removeBg = () => {
+    setBgImage(null);
+    if (fileInputRef.current) fileInputRef.current.value = '';
+  };
 
   const startRecording = useCallback(async () => {
     try {
@@ -92,13 +108,15 @@ export default function App() {
               Share the link below with your guest — they just click it to join, no account needed.
             </p>
             {error && <div className="error-box">{error}</div>}
+
             <div className="invite-box">
               <span className="invite-url">{DAILY_ROOM_URL}</span>
               <button className="btn-copy" onClick={copyLink}>
                 {copied ? '✓ Copied' : 'Copy link'}
               </button>
             </div>
-            <div className="section-label">Choose a theme</div>
+
+            <div className="section-label">Theme</div>
             <div className="theme-row">
               {THEMES.map(t => (
                 <button
@@ -110,6 +128,47 @@ export default function App() {
                 />
               ))}
             </div>
+
+            <div className="section-label">Studio background</div>
+            <div className="bg-upload-row">
+              {bgImage ? (
+                <div className="bg-preview-wrap">
+                  <img src={bgImage} alt="background preview" className="bg-preview" />
+                  <div className="bg-preview-info">
+                    <span className="bg-preview-label">Background set ✓</span>
+                    <button className="btn-remove-bg" onClick={removeBg}>Remove</button>
+                  </div>
+                </div>
+              ) : (
+                <label className="btn-upload-bg">
+                  <input
+                    ref={fileInputRef}
+                    type="file"
+                    accept="image/*"
+                    onChange={handleBgUpload}
+                    style={{ display: 'none' }}
+                  />
+                  ↑ Upload background image
+                </label>
+              )}
+            </div>
+
+            {bgImage && (
+              <div className="opacity-row">
+                <span className="section-label" style={{marginBottom:0}}>Opacity</span>
+                <input
+                  type="range"
+                  min="0.2"
+                  max="1"
+                  step="0.05"
+                  value={bgOpacity}
+                  onChange={e => setBgOpacity(parseFloat(e.target.value))}
+                  className="opacity-slider"
+                />
+                <span className="opacity-val">{Math.round(bgOpacity * 100)}%</span>
+              </div>
+            )}
+
             <button className="btn-primary" onClick={() => { setError(null); setPhase('call'); }}>
               Enter Studio →
             </button>
@@ -118,7 +177,16 @@ export default function App() {
       )}
 
       {phase === 'call' && (
-        <div className="call-view">
+        <div
+          className="call-view"
+          style={bgImage ? {
+            backgroundImage: `url(${bgImage})`,
+            backgroundSize: 'cover',
+            backgroundPosition: 'center',
+          } : {}}
+        >
+          {bgImage && <div className="bg-overlay" style={{ opacity: 1 - bgOpacity }} />}
+
           <div className="call-topbar">
             <span className="logo-sm">◉ studio</span>
             {recording && (
@@ -141,7 +209,7 @@ export default function App() {
               style={{
                 position: 'absolute', top: 0, left: 0,
                 width: '100%', height: '100%',
-                border: 'none', borderRadius: '12px',
+                border: 'none', borderRadius: '16px',
               }}
             />
           </div>
@@ -159,7 +227,13 @@ export default function App() {
               }
             </div>
             <div className="controls-right">
-              <span className="hint">When prompted, share this browser tab</span>
+              <label className="btn-copy-sm" style={{cursor:'pointer'}}>
+                <input type="file" accept="image/*" onChange={handleBgUpload} style={{ display: 'none' }} />
+                {bgImage ? '🖼 Change BG' : '🖼 Add BG'}
+              </label>
+              {bgImage && (
+                <button className="btn-copy-sm" onClick={removeBg}>✕ BG</button>
+              )}
             </div>
           </div>
 
