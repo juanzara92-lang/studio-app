@@ -1,10 +1,8 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import './App.css';
 
-// ── CONFIG ────────────────────────────────────────────────────────────────────
 const DAILY_ROOM_URL = 'https://juanzara.daily.co/studio';
 
-// ── THEMES ───────────────────────────────────────────────────────────────────
 const THEMES = [
   { id: 'noir',   label: 'Noir',   bg: '#0d0d0d', accent: '#c8a97e', text: '#f0ece4' },
   { id: 'slate',  label: 'Slate',  bg: '#1a1f2e', accent: '#7eb8c8', text: '#e8f0f4' },
