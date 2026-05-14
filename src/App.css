@@ -1,0 +1,368 @@
+/* ── CSS VARIABLES (set by theme) ─────────────────────────────────────── */
+:root {
+  --bg:     #0d0d0d;
+  --accent: #c8a97e;
+  --text:   #f0ece4;
+  --card:   rgba(255,255,255,0.04);
+  --border: rgba(255,255,255,0.10);
+  --radius: 14px;
+  --font-display: 'Fraunces', Georgia, serif;
+  --font-mono:    'DM Mono', monospace;
+}
+
+/* ── RESET ─────────────────────────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-mono);
+  font-size: 14px;
+  min-height: 100vh;
+  transition: background 0.4s ease, color 0.4s ease;
+}
+
+button { cursor: pointer; font-family: inherit; }
+
+/* ── APP SHELL ──────────────────────────────────────────────────────────── */
+.app {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ── LOBBY ──────────────────────────────────────────────────────────────── */
+.lobby {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 20px;
+  min-height: 100vh;
+}
+
+.lobby-header {
+  text-align: center;
+  margin-bottom: 48px;
+  animation: fadeUp 0.6s ease both;
+}
+
+.logo {
+  font-family: var(--font-display);
+  font-size: 28px;
+  font-weight: 600;
+  color: var(--accent);
+  letter-spacing: 0.05em;
+  display: block;
+  margin-bottom: 6px;
+}
+
+.logo-sm {
+  font-family: var(--font-display);
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--accent);
+  letter-spacing: 0.05em;
+}
+
+.tagline {
+  font-size: 12px;
+  opacity: 0.45;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.lobby-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 48px 44px;
+  width: 100%;
+  max-width: 520px;
+  animation: fadeUp 0.7s 0.1s ease both;
+  backdrop-filter: blur(12px);
+}
+
+.lobby-card h1 {
+  font-family: var(--font-display);
+  font-size: 32px;
+  font-weight: 300;
+  font-style: italic;
+  color: var(--text);
+  margin-bottom: 10px;
+  line-height: 1.2;
+}
+
+.sub {
+  opacity: 0.55;
+  line-height: 1.7;
+  margin-bottom: 32px;
+  font-size: 13px;
+}
+
+/* Invite box */
+.invite-box {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: rgba(255,255,255,0.04);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 12px 16px;
+  margin-bottom: 28px;
+}
+
+.invite-url {
+  flex: 1;
+  font-size: 12px;
+  color: var(--accent);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  opacity: 0.85;
+}
+
+.btn-copy {
+  background: transparent;
+  border: 1px solid var(--accent);
+  color: var(--accent);
+  border-radius: 6px;
+  padding: 6px 14px;
+  font-size: 12px;
+  letter-spacing: 0.05em;
+  transition: background 0.2s, color 0.2s;
+  white-space: nowrap;
+}
+.btn-copy:hover { background: var(--accent); color: var(--bg); }
+
+/* Section label */
+.section-label {
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  opacity: 0.4;
+  margin-bottom: 12px;
+}
+
+/* Theme swatches */
+.theme-row {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 36px;
+}
+
+.theme-swatch {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: 2px solid transparent;
+  transition: transform 0.2s, border-color 0.2s;
+}
+.theme-swatch:hover  { transform: scale(1.15); }
+.theme-swatch.active { border-width: 2px; transform: scale(1.2); box-shadow: 0 0 0 3px rgba(255,255,255,0.15); }
+
+/* Primary button */
+.btn-primary {
+  width: 100%;
+  background: var(--accent);
+  color: var(--bg);
+  border: none;
+  border-radius: 8px;
+  padding: 16px;
+  font-size: 14px;
+  font-family: var(--font-mono);
+  letter-spacing: 0.08em;
+  font-weight: 500;
+  transition: opacity 0.2s, transform 0.15s;
+}
+.btn-primary:hover { opacity: 0.88; transform: translateY(-1px); }
+.btn-primary:active { transform: translateY(0); }
+
+/* Error box */
+.error-box {
+  background: rgba(220,60,60,0.12);
+  border: 1px solid rgba(220,60,60,0.35);
+  border-radius: 8px;
+  padding: 12px 16px;
+  color: #ff8080;
+  font-size: 12px;
+  margin-bottom: 20px;
+  line-height: 1.6;
+}
+
+/* ── CALL VIEW ──────────────────────────────────────────────────────────── */
+.call-view {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  background: var(--bg);
+}
+
+.call-topbar {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 14px 24px;
+  border-bottom: 1px solid var(--border);
+  flex-shrink: 0;
+}
+
+/* Status pills */
+.guest-pill, .rec-pill {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  background: rgba(255,255,255,0.05);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  padding: 5px 14px;
+  font-size: 12px;
+  letter-spacing: 0.04em;
+}
+
+.dot {
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+.dot.green  { background: #5de890; }
+.dot.grey   { background: #555; }
+.dot.red    { background: #ff4d4d; }
+.dot.pulse  { animation: pulse 1.2s infinite; }
+
+/* Video frame */
+.video-wrapper {
+  flex: 1;
+  position: relative;
+  overflow: hidden;
+  margin: 16px;
+  border-radius: var(--radius);
+  background: #000;
+  border: 1px solid var(--border);
+}
+
+/* Controls bar */
+.controls {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 24px;
+  border-top: 1px solid var(--border);
+  flex-shrink: 0;
+  gap: 12px;
+}
+
+.controls-left, .controls-right, .controls-center {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.ctrl-btn {
+  background: rgba(255,255,255,0.06);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 10px 14px;
+  font-size: 18px;
+  transition: background 0.2s;
+}
+.ctrl-btn:hover { background: rgba(255,255,255,0.12); }
+.ctrl-btn.off   { background: rgba(220,60,60,0.18); border-color: rgba(220,60,60,0.4); }
+
+.btn-record {
+  background: var(--accent);
+  color: var(--bg);
+  border: none;
+  border-radius: 8px;
+  padding: 11px 24px;
+  font-family: var(--font-mono);
+  font-size: 13px;
+  letter-spacing: 0.06em;
+  font-weight: 500;
+  transition: opacity 0.2s;
+}
+.btn-record:hover { opacity: 0.85; }
+
+.btn-stop {
+  background: rgba(220,60,60,0.85);
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 11px 24px;
+  font-family: var(--font-mono);
+  font-size: 13px;
+  letter-spacing: 0.06em;
+  font-weight: 500;
+  transition: opacity 0.2s;
+  animation: pulse-border 1.5s infinite;
+}
+.btn-stop:hover { opacity: 0.85; }
+
+.bg-select {
+  background: rgba(255,255,255,0.06);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  color: var(--text);
+  padding: 10px 12px;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  cursor: pointer;
+}
+
+.btn-leave {
+  background: transparent;
+  border: 1px solid rgba(220,60,60,0.45);
+  color: #ff8080;
+  border-radius: 8px;
+  padding: 10px 20px;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: 0.06em;
+  transition: background 0.2s, color 0.2s;
+}
+.btn-leave:hover { background: rgba(220,60,60,0.2); color: #fff; }
+
+.error-bar {
+  background: rgba(220,60,60,0.12);
+  border-top: 1px solid rgba(220,60,60,0.35);
+  color: #ff8080;
+  padding: 10px 24px;
+  font-size: 12px;
+}
+
+/* ── ENDED ──────────────────────────────────────────────────────────────── */
+.ended-card {
+  text-align: center;
+}
+
+.ended-icon {
+  font-size: 48px;
+  color: var(--accent);
+  margin-bottom: 20px;
+  font-family: var(--font-display);
+}
+
+/* ── ANIMATIONS ─────────────────────────────────────────────────────────── */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(18px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0.3; }
+}
+
+@keyframes pulse-border {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(220,60,60,0); }
+  50%       { box-shadow: 0 0 0 4px rgba(220,60,60,0.3); }
+}
+
+/* ── RESPONSIVE ─────────────────────────────────────────────────────────── */
+@media (max-width: 600px) {
+  .lobby-card { padding: 32px 24px; }
+  .controls   { flex-wrap: wrap; justify-content: center; }
+  .controls-left, .controls-right { gap: 8px; }
+}
