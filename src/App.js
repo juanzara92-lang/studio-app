@@ -4,8 +4,8 @@ import './App.css';
 
 // ── CONFIG ────────────────────────────────────────────────────────────────────
 // Replace the two values below with YOUR Daily.co details
-const DAILY_ROOM_URL = 'https://juanzara.daily.co/studio'; // ← paste your room URL
-const DAILY_API_KEY  = '055a8b23a37775f28b2d45bbe916e2d9fe3e3c3830d6217a5d45cdabbca8e4c4PI_KEY_HERE';                       // ← paste your API key
+const DAILY_ROOM_URL = 'https://YOUR_SUBDOMAIN.daily.co/studio'; // ← paste your room URL
+const DAILY_API_KEY  = 'YOUR_API_KEY_HERE';                       // ← paste your API key
 
 // ── THEMES ───────────────────────────────────────────────────────────────────
 const THEMES = [
@@ -60,25 +60,25 @@ export default function App() {
     }
 
     try {
-      const call = DailyIframe.createCallObject({ url: DAILY_ROOM_URL });
-      callRef.current = call;
+      // Destroy any existing instance first to avoid duplicates
+      const existing = DailyIframe.getCallInstance();
+      if (existing) await existing.destroy();
 
-      call.on('participant-joined', () => setGuestJoined(true));
-      call.on('participant-left',   () => setGuestJoined(false));
-      call.on('error', (e) => setError(e.errorMsg || 'Call error'));
-
-      await call.join({ url: DAILY_ROOM_URL, token: DAILY_API_KEY });
-
-      // Mount call UI into wrapper div
+      // Create a single iframe-based frame
       const frame = DailyIframe.createFrame(wrapperRef.current, {
         iframeStyle: {
           position: 'absolute', top: 0, left: 0,
           width: '100%', height: '100%',
           border: 'none', borderRadius: '12px',
         },
-        showLeaveButton:    false,
+        showLeaveButton:     false,
         showFullscreenButton: true,
       });
+
+      frame.on('participant-joined', () => setGuestJoined(true));
+      frame.on('participant-left',   () => setGuestJoined(false));
+      frame.on('error', (e) => setError(e.errorMsg || 'Call error'));
+
       await frame.join({ url: DAILY_ROOM_URL });
       callRef.current = frame;
 
